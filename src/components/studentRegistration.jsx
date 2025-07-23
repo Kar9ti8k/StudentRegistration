@@ -1,7 +1,7 @@
 import React from 'react'
 
-const studentRegistration = () => {
+const StudentRegistration = () => {
   return <div>studentRegistration</div>
 }
 
-export default studentRegistration
+export default StudentRegistration

@@ -1,7 +1,7 @@
 import React from 'react'
 
-const courseOfferingManager = () => {
+const CourseOfferingManager = () => {
   return <div>courseOfferingManager</div>
 }
 
-export default courseOfferingManager
+export default CourseOfferingManager
