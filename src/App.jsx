@@ -9,12 +9,15 @@ function App() {
 
   return (
     <>
-      <div className='app'>
-        <h1>Student Registration System</h1>
-        <CoureseType />
-        <CourseManager />
-        <CourseOfferingManager />
-        <StudentRegistration />
+      <div className='bg-lime-50 h-[39rem] w-full '>
+        <h1 className='text-[2rem]'>Student Registration System</h1>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 p-4 m-4 bg-lime-200 m-4 h-auto w-auto shadow-2xs '>
+          <CoureseType />
+          <CourseManager />
+          <CourseOfferingManager />
+          <StudentRegistration />
+        </div>
       </div>
     </>
   )
