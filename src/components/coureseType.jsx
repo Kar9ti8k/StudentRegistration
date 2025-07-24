@@ -38,7 +38,7 @@ const CoureseType = () => {
         </div>
         <ul>
           {courseType.map((type, index) => (
-            <li key={index}>
+            <li key={index} className='flex items-center gap-2 m-4'>
               {type} <button onClick={() => deleteType(index)}>&times;</button>
             </li>
           ))}

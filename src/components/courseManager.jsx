@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useAppContext } from '../context/AppContext'
-
 const CourseManager = () => {
   const [courses, setCourses] = useState(['Hindi', 'English', 'Urdu'])
   // const { courses, setCourses } = useAppContext()
@@ -13,6 +12,10 @@ const CourseManager = () => {
       setCourses([...CourseManager, newCourse])
       setNewCourse('')
     }
+  }
+  const deleteCourse = (index) => {
+    const filiterd = courses.filter((_, i) => i !== index)
+    setCourses(filiterd)
   }
   return (
     <>
@@ -29,8 +32,9 @@ const CourseManager = () => {
         </div>
         <ul className='mt-2 list-disc pl-4'>
           {courses.map((course, index) => (
-            <li key={index} className='flex items-center gap-2'>
+            <li key={index} className='flex items-center gap-2 pl-4'>
               {course}
+              <button onClick={() => deleteCourse(index)}>&times;</button>
             </li>
           ))}
         </ul>
