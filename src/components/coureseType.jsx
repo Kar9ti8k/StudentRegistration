@@ -1,7 +1,9 @@
 import { React, useState } from 'react'
+import { useAppContext } from '../context/AppContext'
 const initialCourses = ['Individual', 'Group', 'Special']
 
 const CoureseType = () => {
+  // const { courseType, setCoureseType } = useAppContext
   const [courseType, setCoureseType] = useState(initialCourses)
   const [courseValue, setCoureseValue] = useState('')
   const dataAdd = () => {
@@ -30,7 +32,9 @@ const CoureseType = () => {
         </div>
         <ul>
           {courseType.map((type, index) => (
-            <li key={index}>{type}</li>
+            <li key={index}>
+              {type} <button>&times,</button>
+            </li>
           ))}
         </ul>
       </div>
