@@ -13,6 +13,13 @@ const CourseManager = () => {
       setNewCourse('')
     }
   }
+  const updateCourse = (index) => {
+    const updated = [...courses]
+    updated[index] = editValue
+    setCourses(updated)
+    setEditIndex(null)
+    setEditValue('')
+  }
   const deleteCourse = (index) => {
     const filiterd = courses.filter((_, i) => i !== index)
     setCourses(filiterd)
@@ -32,9 +39,41 @@ const CourseManager = () => {
         </div>
         <ul className='mt-2 list-disc pl-4'>
           {courses.map((course, index) => (
-            <li key={index} className='flex items-center gap-2 pl-4'>
-              {course}
-              <button onClick={() => deleteCourse(index)}>&times;</button>
+            <li key={index} className='flex items-center gap-2'>
+              {editIndex === index ? (
+                <>
+                  <input
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    className='border p-1'
+                  />
+                  <button
+                    onClick={() => updateCourse(index)}
+                    className='bg-blue-500 text-white px-2'
+                  >
+                    Save
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span>{course}</span>
+                  <button
+                    onClick={() => {
+                      setEditIndex(index)
+                      setEditValue(course)
+                    }}
+                    className='text-blue-600'
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteCourse(index)}
+                    className='text-red-600'
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
             </li>
           ))}
         </ul>
