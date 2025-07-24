@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useAppContext } from '../context/AppContext'
 const CourseManager = () => {
-  const [courses, setCourses] = useState(['Hindi', 'English', 'Urdu'])
-  // const { courses, setCourses } = useAppContext()
+  // const [courses, setCourses] = useState(['Hindi', 'English', 'Urdu'])
+  const { courses, setCourses } = useAppContext()
 
   const [newCourse, setNewCourse] = useState('')
   const [editIndex, setEditIndex] = useState(null)
@@ -13,6 +13,7 @@ const CourseManager = () => {
       setNewCourse('')
     }
   }
+
   const updateCourse = (index) => {
     const updated = [...courses]
     updated[index] = editValue
