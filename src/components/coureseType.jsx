@@ -39,7 +39,7 @@ const CourseType = () => {
           <li key={index} className='flex items-center gap-2 m-4'>
             {type}{' '}
             <button className='text-red-500' onClick={() => deleteType(index)}>
-              ×
+              &times;
             </button>
           </li>
         ))}
