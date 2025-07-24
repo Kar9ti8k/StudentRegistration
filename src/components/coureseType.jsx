@@ -6,11 +6,17 @@ const CoureseType = () => {
   // const { courseType, setCoureseType } = useAppContext
   const [courseType, setCoureseType] = useState(initialCourses)
   const [courseValue, setCoureseValue] = useState('')
+
   const dataAdd = () => {
     if (courseValue && !courseType.includes(courseValue)) {
       setCoureseType([...courseValue, courseType])
       setCoureseValue('')
     }
+  }
+
+  const deleteType = (index) => {
+    const courseTypeDelete = courseType.filter((_, i) => i !== index)
+    setCoureseType(courseTypeDelete)
   }
   return (
     <>
@@ -33,7 +39,7 @@ const CoureseType = () => {
         <ul>
           {courseType.map((type, index) => (
             <li key={index}>
-              {type} <button>&times,</button>
+              {type} <button onClick={() => deleteType(index)}>&times;</button>
             </li>
           ))}
         </ul>
