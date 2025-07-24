@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAppContext } from '../context/AppContext'
 
 const StudentRegistration = () => {
   const { offerings, registrations, setRegistrations, courseTypes } =
     useAppContext()
+
   const [studentName, setStudentName] = useState('')
   const [selectedOfferingId, setSelectedOfferingId] = useState('')
   const [filterType, setFilterType] = useState('')
@@ -13,10 +14,19 @@ const StudentRegistration = () => {
     ? offerings.filter((o) => o.type === filterType)
     : offerings
 
+  // Clear error on any field change
+  useEffect(() => {
+    setError('')
+  }, [studentName, selectedOfferingId, filterType])
+
   const handleRegister = (e) => {
     e.preventDefault()
 
-    if (!studentName.trim()) {
+    const trimmedName = studentName.trim()
+    const selectedId = Number(selectedOfferingId)
+    const offering = offerings.find((o) => o.id === selectedId)
+
+    if (!trimmedName) {
       setError('Please enter a valid student name')
       return
     }
@@ -26,23 +36,32 @@ const StudentRegistration = () => {
       return
     }
 
-    const offering = offerings.find((o) => o.id === Number(selectedOfferingId))
-
     if (!offering) {
       setError('Selected course not found')
       return
     }
 
+    // Check for duplicate registration
+    const isDuplicate = registrations.some(
+      (r) =>
+        r.name.toLowerCase() === trimmedName.toLowerCase() &&
+        r.offering.id === selectedId
+    )
+
+    if (isDuplicate) {
+      setError('This student is already registered for the selected course')
+      return
+    }
+
     const registration = {
       id: Date.now(),
-      name: studentName.trim(),
+      name: trimmedName,
       offering,
     }
 
     setRegistrations([...registrations, registration])
     setStudentName('')
     setSelectedOfferingId('')
-    setError('')
   }
 
   return (
@@ -65,7 +84,6 @@ const StudentRegistration = () => {
             className='w-full border p-2 rounded mt-1'
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            aria-label='Filter by course type'
           >
             <option value=''>All Course Types</option>
             {courseTypes.map((type) => (
@@ -99,7 +117,6 @@ const StudentRegistration = () => {
             className='w-full border p-2 rounded mt-1'
             value={selectedOfferingId}
             onChange={(e) => setSelectedOfferingId(e.target.value)}
-            aria-label='Select a course'
             aria-required='true'
           >
             <option value=''>Select a course</option>
@@ -109,6 +126,11 @@ const StudentRegistration = () => {
               </option>
             ))}
           </select>
+          {filteredOfferings.length === 0 && (
+            <p className='text-sm text-gray-500 mt-1'>
+              No courses available for this type.
+            </p>
+          )}
         </div>
 
         <button
