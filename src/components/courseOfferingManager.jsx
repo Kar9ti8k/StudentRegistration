@@ -3,79 +3,92 @@ import { useAppContext } from '../context/AppContext'
 
 const CourseOfferingManager = () => {
   const { courses, courseTypes, offerings, setOfferings } = useAppContext()
-  // const [courseTypes, setCourseTypes] = useState([
-  //   'Individual',
-  //   'Group',
-  //   'Special',
-  // ])
-  // const [courses, setCourses] = useState(['Hindi', 'English', 'Urdu'])
-  // const [offerings, setOfferings] = useState([])
   const [selectedCourse, setSelectedCourse] = useState('')
   const [selectedType, setSelectedType] = useState('')
-  console.log(courseTypes)
+  const [editingIndex, setEditingIndex] = useState(null)
 
-  const addOffreing = () => {
-    if (selectedType && selectedCourse) {
-      const newOffering = {
-        id: new Date(),
-        course: selectedCourse,
-        type: selectedType,
+  const handleAdd = () => {
+    if (selectedCourse && selectedType) {
+      const newOffering = `${selectedType} - ${selectedCourse}`
+      if (!offerings.includes(newOffering)) {
+        setOfferings([...offerings, newOffering])
+        setSelectedCourse('')
+        setSelectedType('')
       }
-      setOfferings([...offerings, newOffering])
-      setSelectedCourse('')
-
-      setSelectedType('')
     }
   }
 
-  const deleteOfferings = (data) => {
-    setOfferings(offerings.filter((o) => o.id !== data.id))
+  const handleDelete = (index) => {
+    const updated = offerings.filter((_, i) => i !== index)
+    setOfferings(updated)
+  }
+
+  const handleEdit = (index) => {
+    const [type, course] = offerings[index].split(' - ')
+    setSelectedType(type)
+    setSelectedCourse(course)
+    setEditingIndex(index)
+  }
+
+  const handleSave = () => {
+    if (selectedCourse && selectedType) {
+      const updated = [...offerings]
+      updated[editingIndex] = `${selectedType} - ${selectedCourse}`
+      setOfferings(updated)
+      setSelectedCourse('')
+      setSelectedType('')
+      setEditingIndex(null)
+    }
   }
 
   return (
-    <>
-      <div className='h-[14rem] bg-white w-[25rem] flex flex-col items-start rounded-sm shadow-2xs'>
-        <h1 className='m-2 pl-2'>Course Type</h1>
-        <div className='gap-4'>
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-          >
-            <option value=''>Select Course</option>
-            {courses.map((course, index) => (
-              <option key={index} value={course}>
-                {course}
-              </option>
-            ))}
-          </select>
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-          >
-            <option value=''>Select Type</option>
-            {courseTypes.map((type, index) => (
-              <option key={index} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button onClick={addOffreing}>add</button>
-        <ul className='mt-2'>
-          {offerings.map((o) => (
-            <li key={o.id} className='flex justify-between mt-1'>
-              <span>{`${o.type} - ${o.course}`}</span>
-              <button
-                className='bg-red-500 text-white px-2 py-1'
-                onClick={() => deleteOfferings(o)}
-              >
-                Delete
-              </button>
-            </li>
+    <div className='h-[14rem] bg-white w-[25rem] flex flex-col items-start rounded-sm shadow-sm'>
+      <h2>Manage Course Offerings</h2>
+      <div className='flex'>
+        {' '}
+        <select
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+        >
+          <option value=''>Select Type</option>
+          {courseTypes.map((type, i) => (
+            <option key={i} value={type}>
+              {type}
+            </option>
           ))}
-        </ul>
-      </div>
-    </>
+        </select>
+        <select
+          value={selectedCourse}
+          onChange={(e) => setSelectedCourse(e.target.value)}
+        >
+          <option value=''>Select Course</option>
+          {courses.map((course, i) => (
+            <option key={i} value={course}>
+              {course}
+            </option>
+          ))}
+        </select>
+        {editingIndex !== null ? (
+          <button onClick={handleSave}>Save</button>
+        ) : (
+          <button
+            className='bg-blue-700 h-10 w-[4rem] text-white pointer '
+            onClick={handleAdd}
+          >
+            Add
+          </button>
+        )}
+      </div>{' '}
+      <ul>
+        {offerings.map((offer, index) => (
+          <li key={index}>
+            {offer}
+            <button onClick={() => handleEdit(index)}>Edit</button>
+            <button onClick={() => handleDelete(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
